@@ -1,4 +1,4 @@
-name: Unzip and Build 1.21.1 Mod
+name: Build 1.21.1 Mod
 on: [push, workflow_dispatch]
 
 jobs:
@@ -7,9 +7,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # This step opens your zip file automatically
+      # Fix: Added quotes for the space and used * to find files regardless of folder name
       - name: Extract Project Files
-        run: unzip "Dubara Macros.zip" -d .
+        run: |
+          unzip "Dubara Macros.zip" -d extracted_files
+          mv extracted_files/Dubara\ Macros/* . || mv extracted_files/* .
 
       - name: Setup Java 21
         uses: actions/setup-java@v4
@@ -28,3 +30,4 @@ jobs:
         with:
           name: Minecraft-1.21.1-Mod
           path: build/libs/*.jar
+
