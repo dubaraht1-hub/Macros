@@ -1,0 +1,30 @@
+name: Unzip and Build 1.21.1 Mod
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # This step opens your zip file automatically
+      - name: Extract Project Files
+        run: unzip "Dubara Macros.zip" -d .
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Make Gradle Ready
+        run: chmod +x gradlew
+
+      - name: Build Mod
+        run: ./gradlew build
+
+      - name: Save My Mod Jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: Minecraft-1.21.1-Mod
+          path: build/libs/*.jar
